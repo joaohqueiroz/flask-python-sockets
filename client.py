@@ -2,29 +2,29 @@ from server import socket, json, Thread
 import random
 
 
-def ler_vetor():
+def create_list():
     print("Escreva a quantidade de digitos: ")
-    qtd = int(input())
+    len = int(input())
 
     print("Escreva o número que deseja encontrar: ")
     num = int(input())
 
     count = 0
     numbers = []
-    while count < qtd:
+    while count < len:
         numbers.append(random.randint(0, 9))
         count += 1
 
     numbers = [numbers[i::2] for i in range(2)]
 
-    thread = Thread(target=requisicao, args=(numbers[0], num, 3001))
+    thread = Thread(target=request, args=(numbers[0], num, 3001))
     thread.start()
 
-    thread = Thread(target=requisicao, args=(numbers[1], num, 3002))
+    thread = Thread(target=request, args=(numbers[1], num, 3002))
     thread.start()
 
 
-def requisicao(numbers, num, port):
+def request(numbers, num, port):
     sck = socket()
 
     server_info = ('127.0.0.1', port)
@@ -43,4 +43,4 @@ def requisicao(numbers, num, port):
 
 
 if __name__ == '__main__':
-    ler_vetor()
+    create_list()

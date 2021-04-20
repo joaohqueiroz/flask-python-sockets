@@ -3,11 +3,11 @@ from threading import Thread
 import sys
 import json
 
-porta = 3000
+port = 3000
 
 
-def processar(conexao):
-    data = json.loads(conexao.recv(1000))
+def process(connection):
+    data = json.loads(connection.recv(1000))
     numbers = data["numbers"]
     print(numbers)
     num = data["num"]
@@ -17,14 +17,14 @@ def processar(conexao):
     else:
         index = -1
 
-    conexao.send(b"%d" % index)
+    connection.send(b"%d" % index)
 
-    conexao.close()
+    connection.close()
 
 
-def escutar():
+def listen():
     print("Iniciando Servidor...")
-    socket_bind_info = ('127.0.0.1', porta)
+    socket_bind_info = ('127.0.0.1', port)
     sck = socket()
     sck.bind(socket_bind_info)
     sck.listen()
@@ -32,9 +32,9 @@ def escutar():
 
     while True:
         try:
-            conexao, origem = sck.accept()
+            connection, origin = sck.accept()
             print("Nova conexão estabelecida...")
-            thread = Thread(target=processar, args=(conexao, ))
+            thread = Thread(target=process, args=(connection, ))
             thread.start()
             print(f"Thread iniciada - {thread}")
 
@@ -44,5 +44,5 @@ def escutar():
 
 
 if __name__ == '__main__':
-    porta = int(sys.argv[1])
-    escutar()
+    port = int(sys.argv[1])
+    listen()
